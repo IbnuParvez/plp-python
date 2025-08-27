@@ -7,6 +7,3 @@ modified_content = content.upper()
 
 with open("output.txt", "w") as output:
     output.write(modified_content)
-
-
-  
