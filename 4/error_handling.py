@@ -3,7 +3,7 @@
 name = input("What's the file name ? ")
 
 try:
-  with open(filename, "r") as file:
+  with open(name, "r") as file:
     print("File name is: ")
     print(file.read())
 
