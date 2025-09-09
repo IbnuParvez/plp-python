@@ -1,27 +1,63 @@
-x = float(input("What is your first choice? "))
+from typing import Callable, Dict
 
-y = float(input("What is your second number "))
 
-operation = input("Enter your preferred operation (+, -, *, /,): ")
+def add(a: float, b: float) -> float:
+    return a + b
 
-if operation == "+":
-    result = x + y 
-    print(f"{x} + {y} = {result}")
 
-elif operation == "-":
-    result = x - y 
-    print(f"{x} - {y} = {result}")
+def subtract(a: float, b: float) -> float:
+    return a - b
 
-elif operation == "*":
-    result = x * y 
-    print(f"{x} * {y} = {result}")
 
-elif operation == "/":
-    if y != 0:
-      result = x / y
-      print(f"{x} / {y} = {result}")
-    else:
-      print("Division by zero is not your level boss!!!")
+def multiply(a: float, b: float) -> float:
+    return a * b
 
-else:
-    print("Please choose the appropriate operations as stipulated")
+
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        raise ZeroDivisionError("Cannot divide by zero")
+    return a / b
+
+
+OPERATIONS: Dict[str, Callable[[float, float], float]] = {
+    "+": add,
+    "-": subtract,
+    "*": multiply,
+    "/": divide,
+}
+
+
+def get_float(prompt: str) -> float:
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Please enter a valid number.")
+
+
+def get_operation() -> str:
+    while True:
+        op = input("Enter your preferred operation (+, -, *, /): ").strip()
+        if op in OPERATIONS:
+            return op
+        print("Please choose a valid operation: +, -, *, /")
+
+
+def main() -> None:
+    while True:
+        x = get_float("What is your first number? ")
+        y = get_float("What is your second number? ")
+        operation = get_operation()
+        try:
+            result = OPERATIONS[operation](x, y)
+            print(f"{x} {operation} {y} = {result}")
+        except ZeroDivisionError as exc:
+            print(exc)
+
+        again = input("Do you want to perform another calculation? (y/n): ").strip().lower()
+        if again != "y":
+            break
+
+
+if __name__ == "__main__":
+    main()
